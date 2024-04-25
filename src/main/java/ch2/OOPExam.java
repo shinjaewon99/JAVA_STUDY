@@ -17,7 +17,7 @@ public class OOPExam {
 
         // 행동 자체인 객체를 파라미터로 넘긴다.
         final FpCalculatorService fpCalculatorService = new FpCalculatorService();
-        System.out.println("addition : " + fpCalculatorService.calculate(new Addition(), 1, 2));
+        System.out.println("addition : " + fpCalculatorService.calculate((i1, i2) -> i1 + i2, 1, 2));
         System.out.println("subtraction : " + fpCalculatorService.calculate(new Subtraction(), 3, 2));
     }
 }
