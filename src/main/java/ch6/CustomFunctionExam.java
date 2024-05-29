@@ -28,8 +28,8 @@ public class CustomFunctionExam {
 
         // 람다 메소드가 되는 타겟 메소드가 제네릭이라 에러 발생
         // 타입에 대한 정보 (I, O) 가 없음 -> value.toString()을 작성할 시점에는 타입에 대해 알 수가 없어 에러 발생
-        final InvalidFunctionalInterface invalidFunctionalInterface = value -> value.toString();
-        System.out.println(invalidFunctionalInterface.mkString(123));
+//        final InvalidFunctionalInterface invalidFunctionalInterface = value -> value.toString();
+//        System.out.println(invalidFunctionalInterface.mkString(123));
     }
 
     private static <T1, T2, T3> void customPrint(T1 t1, T2 t2, T3 t3, Function3<T1, T2, T3, String> function) {
