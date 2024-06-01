@@ -38,14 +38,36 @@ public class FunctionalInterfaceExam {
                 map(expensiveProduct, product -> new DiscountProduct(product.getId(), product.getName(),
                         product.getPrice().multiply(new BigDecimal("0.5"))));
 
+        final Predicate<Product> lessThenOrEquals30 = product -> product.getPrice().compareTo(new BigDecimal("30")) <= 0;
+
         System.out.println("expensiveProduct = " + expensiveProduct);
         System.out.println("discountProduct = " + discountProduct);
 
         System.out.println("discountProduct result" +
                 filter(discountProduct, product -> product.getPrice().compareTo(new BigDecimal("30")) <= 0));
+
+
+        final List<BigDecimal> prices = map(products, product -> product.getPrice());
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (final BigDecimal price : prices) {
+            total = total.add(price);
+        }
+
+        System.out.println(total);
+
+        final BigDecimal newTotal = total(products, product -> product.getPrice());
+
+        System.out.println(newTotal);
+
+        final BigDecimal discountTotal = total(discountProduct, product -> product.getPrice());
+
+        System.out.println("discountTotal = " + discountTotal);
+
     }
 
-    private static <T> List<T> filter(List<T> list, Predicate<T> predicate) {
+
+    private static <T> List<T> filter(List<T> list, Predicate<? super T> predicate) {
         final List<T> result = new ArrayList<>();
         for (final T t : list) {
             if (predicate.test(t)) {
@@ -53,6 +75,16 @@ public class FunctionalInterfaceExam {
             }
         }
         return result;
+    }
+
+    private static <T> BigDecimal total(List<T> list, Function<T, BigDecimal> mapper) {
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (final T t : list) {
+            total = total.add(mapper.apply(t));
+        }
+
+        return total;
     }
 
     private static <T, R> List<R> map(List<T> list, Function<T, R> function) {
@@ -79,4 +111,19 @@ class DiscountProduct extends Product {
     public DiscountProduct(final Long id, final String name, final BigDecimal price) {
         super(id, name, price);
     }
+}
+
+@AllArgsConstructor
+@Data
+class OrderItem {
+    private Long id;
+    private Product product;
+    private int quantity;
+}
+
+@Data
+class Order {
+    private Long id;
+    private String orderNumber;
+    private List<OrderItem> items;
 }
