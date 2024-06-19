@@ -2,6 +2,7 @@ package ch12;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,32 @@ public class MethodReferenceEx {
         );
 
         methodReference03();
+
+
+        // 람다 사용
+        final List<Function<Integer, String>> fsl = Arrays.asList(i -> String.valueOf(i * 2));
+        for (Function<Integer, String> f : fsl) {
+            final String result = f.apply(3);
+            System.out.println(result);
+        }
+
+        // 메소드 참조 사용
+        final List<Function<Integer, String>> fsMr = Arrays.asList(MethodReferenceEx::doubleThenToString);
+        for (Function<Integer, String> f : fsMr) {
+            final String result = f.apply(3);
+            System.out.println(result);
+        }
+
+        // 람다 메소드 참조 둘다 사용
+        final List<Function<Integer, String>> fsBoth =
+                Arrays.asList(i ->
+                                String.valueOf(i * 2),
+                        MethodReferenceEx::doubleThenToString,
+                        MethodReferenceEx::addHashPrefix);
+
+        for (Function<Integer, String> f : fsBoth) {
+            System.out.println(f.apply(8));
+        }
     }
 
     private static void methodReference03() {
@@ -59,6 +86,12 @@ public class MethodReferenceEx {
     private static Function<Integer, String> getDoubleThenToStringUsingMethod() {
         return MethodReferenceEx::doubleThenToString;
     }
+
+    private static String addHashPrefix(final int number) {
+        return "#" + number;
+    }
+
+
 }
 
 class BigDecimalUtil {
