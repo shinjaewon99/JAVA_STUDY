@@ -23,32 +23,48 @@ public class ConstructorEx {
         System.out.println(sectionWithFunction);
         System.out.println(result);
 
-        final Product product = new Product(1L, "A", new BigDecimal("100"));
+        final OldProduct product = new OldProduct(1L, "A", new BigDecimal("100"));
         System.out.println(product);
 
-        final ProductCreator productCreator = Product::new;
-        System.out.println(productCreator.create(1L, "A", new BigDecimal("100")));
+        final ProductCreator2 ProductCreator2 = OldProduct::new;
+        System.out.println(ProductCreator2.create(1L, "A", new BigDecimal("100")));
+
+        ProductA resultA = createProduct(1L, "A", new BigDecimal("123"), ProductA::new);
+        ProductB resultB = createProduct(2L, "A", new BigDecimal("123"), ProductB::new);
+
+
     }
 
     // 아직 반환받을 객체가 정해지지 않았을 경우를 가정하여 제네릭 타입 사용
-    private <T extends Product> T createProduct(Long id, String name, BigDecimal price, ProductCreator productCreator) {
-        if(id == null || id < 1L){
+    private static <T extends Product> T createProduct(final Long id,
+                                                       final String name,
+                                                       final BigDecimal price,
+                                                       final ProductCreator<T> productCreator) {
+        if (id == null || id < 1L) {
             throw new IllegalArgumentException("id 값은 양수이어야 합니다.");
         }
 
-        if(name == null || name.isEmpty()) {
+        if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("이름이 주어지지 않았습니다.");
         }
 
-        if(price == null || BigDecimal.ZERO.compareTo(price) <= 0) {
+        if (price == null || BigDecimal.ZERO.compareTo(price) <= 0) {
+            throw new IllegalArgumentException("상품의 가격은 0보다 커야 합니다.");
         }
+
+        return productCreator.create(id, name, price);
     }
 }
 
 // 커스텀 함수형 인터페이스
 @FunctionalInterface
-interface ProductCreator {
-    Product create(Long id, String name, BigDecimal price);
+interface ProductCreator<T extends Product> {
+    T create(Long id, String name, BigDecimal price);
+}
+
+@FunctionalInterface
+interface ProductCreator2<T extends OldProduct> {
+    T create(Long id, String name, BigDecimal price);
 }
 
 @AllArgsConstructor
@@ -59,7 +75,15 @@ class Section {
 
 @AllArgsConstructor
 @Data
-class Product {
+class OldProduct {
+    private Long id;
+    private String name;
+    private BigDecimal price;
+}
+
+@AllArgsConstructor
+@Data
+abstract class Product {
     private Long id;
     private String name;
     private BigDecimal price;
