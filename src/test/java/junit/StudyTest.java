@@ -4,10 +4,15 @@ import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * 언더 스코어 "_" 를 빈 공백으로 치환하는 전략
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+ */
 class StudyTest {
 
     @Test
-    void create() {
+    @DisplayName("스터디 만들기")
+    void create_new_study() {
         Study study = new Study();
         assertNotNull(study);
 
@@ -15,8 +20,8 @@ class StudyTest {
     }
 
     @Test
-    @Disabled // 해당 테스트를 무시하는 어노테이션
-    void create1() {
+    // @Disabled // 해당 테스트를 무시하는 어노테이션
+    void create_new_study_again() {
         System.out.println("create1");
     }
 
