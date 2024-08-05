@@ -9,5 +9,5 @@ chapter 패키지 별로 정리할 계획이며,
 - 참고 지식은 https://www.youtube.com/playlist?list=PLRIMoAKN8c6O8_VHOyBOhzBCeN7ShyJ27 영상을 참고하여 작성 하였습니다.
 
 
-#ch2
+# JUnit_Test
 - JUnit 5를 이용한 테스트 코드 작성
