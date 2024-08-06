@@ -3,6 +3,8 @@ package junit;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 /**
  * 언더 스코어 "_" 를 빈 공백으로 치환하는 전략
@@ -14,8 +16,7 @@ class StudyTest {
     @Test
     @DisplayName("스터디 만들기")
     void create_new_study() {
-        Study study = new Study();
-
+        Study study = new Study(10);
 
         /**
          * 두개 이상의 assert 검증 일경우, 처음 assert가 실패하게 되면 두번째에 있는 assert는 검증을 할 수 조차 없음으로,
@@ -42,6 +43,14 @@ class StudyTest {
         // @Disabled // 해당 테스트를 무시하는 어노테이션
     void create_new_study_again() {
         System.out.println("create1");
+
+
+        /**
+         * IllegalArgumentException 예외가 발생할 것을 예상하고 작성하는 Assertions
+         */
+        IllegalArgumentException exception
+                = assertThrows(IllegalArgumentException.class, () -> new Study(-10));
+        assertEquals("limit은 0보다 커야 한다.", exception.getMessage());
     }
 
     /**
