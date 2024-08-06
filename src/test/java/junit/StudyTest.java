@@ -2,6 +2,8 @@ package junit;
 
 import org.junit.jupiter.api.*;
 
+import java.time.Duration;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -51,6 +53,26 @@ class StudyTest {
         IllegalArgumentException exception
                 = assertThrows(IllegalArgumentException.class, () -> new Study(-10));
         assertEquals("limit은 0보다 커야 한다.", exception.getMessage());
+    }
+
+    @Test
+    void create_new_study_again_time() {
+        /**
+         * 테스트가 정의한 Time안에 끝내야 하는 Assertions
+         *
+         * assertTimeout(Duration.ofMillis(100), () -> {
+         *             new Study(10);
+         *             Thread.sleep(300);
+         *         });
+         */
+
+        /**
+         * 정의한 Time 근처에 테스트가 바로 종료 된다. (주의해서 사용, ThreadLocaL 사용시)
+         *  assertTimeoutPreemptively(Duration.ofMillis(100), () -> {
+         *             new Study(10);
+         *             Thread.sleep(300);
+         *         });
+         */
     }
 
     /**
