@@ -110,6 +110,19 @@ class StudyTest {
 
     }
 
+    // edit configuration 에서 test 설정을 tag 별로 분리해서 실행
+    @Test
+    @Tag("fast")
+    void fast_tag_test() {
+
+    }
+
+    @Test
+    @Tag("slow")
+    void slow_tag_test() {
+
+    }
+
     /**
      * 모든 테스트가 실행되기 전에 "한번"만 호출 되는것
      * 클래스 레벨에서 실행되어야 함으로, 반드시 static으로 선언
