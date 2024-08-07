@@ -1,12 +1,15 @@
 package junit;
 
+import jdk.jfr.Enabled;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.*;
 
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 /**
  * 언더 스코어 "_" 를 빈 공백으로 치환하는 전략
@@ -73,6 +76,38 @@ class StudyTest {
          *             Thread.sleep(300);
          *         });
          */
+    }
+
+    @Test
+
+    // @EnabledOnOs(OS.MAC), OS가 MAC 인경우에는 실행
+    // @DisabledOnOs({OS.WINDOWS, OS.LINUX}) OS가 WINDOW 일 때는 무시
+    // @EnabledOnJre(JRE.JAVA_8) 특정 자바 버전에 따라 핸들링
+    void create_assume_test() {
+        /**
+         * 테스트 환경이 LOCAL 인 경우에만 테스트 실행
+         */
+        String test_env = System.getenv("TEST ENV");
+        System.out.println(test_env);
+        assumeTrue("LOCAL".equalsIgnoreCase(test_env));
+
+
+        /**
+         * 환경변수가 LOCAL 일 경우 아래의 테스트가 실행
+         */
+        assumingThat("LOCAL".equalsIgnoreCase(test_env), () -> {
+            Study study = new Study(100);
+            assertEquals(100, study.getLimit());
+        });
+
+        /**
+         * 환경변수가 JW 일 경우 아래의 테스트가 실행
+         */
+        assumingThat("JW".equalsIgnoreCase(test_env), () -> {
+            Study study = new Study(-10);
+            assertEquals(-10, study.getLimit());
+        });
+
     }
 
     /**
