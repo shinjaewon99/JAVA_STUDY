@@ -111,14 +111,21 @@ class StudyTest {
     }
 
     // edit configuration 에서 test 설정을 tag 별로 분리해서 실행
-    @Test
-    @Tag("fast")
+    @FastTest
+    /**
+     * 생략 가능
+     * @Test
+     * @Tag("fast")
+     */
     void fast_tag_test() {
 
     }
 
-    @Test
-    @Tag("slow")
+    @SlowTest
+    /**
+     * @Test
+     * @Tag("slow")
+     */
     void slow_tag_test() {
 
     }
