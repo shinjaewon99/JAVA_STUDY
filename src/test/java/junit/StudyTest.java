@@ -1,13 +1,10 @@
 package junit;
 
-import jdk.jfr.Enabled;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.condition.*;
-
-import java.time.Duration;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.junit.jupiter.api.Assumptions.assumingThat;
 
@@ -80,9 +77,9 @@ class StudyTest {
 
     @Test
 
-    // @EnabledOnOs(OS.MAC), OS가 MAC 인경우에는 실행
-    // @DisabledOnOs({OS.WINDOWS, OS.LINUX}) OS가 WINDOW 일 때는 무시
-    // @EnabledOnJre(JRE.JAVA_8) 특정 자바 버전에 따라 핸들링
+        // @EnabledOnOs(OS.MAC), OS가 MAC 인경우에는 실행
+        // @DisabledOnOs({OS.WINDOWS, OS.LINUX}) OS가 WINDOW 일 때는 무시
+        // @EnabledOnJre(JRE.JAVA_8) 특정 자바 버전에 따라 핸들링
     void create_assume_test() {
         /**
          * 테스트 환경이 LOCAL 인 경우에만 테스트 실행
@@ -127,6 +124,22 @@ class StudyTest {
      * @Tag("slow")
      */
     void slow_tag_test() {
+
+    }
+
+    @DisplayName("반복 테스트")
+    // 테스트 name을 pathVariable 처럼 바인딩 할 수 있음
+    @RepeatedTest(value = 10, name = "{displayName}, {currentRepetition}/{totalRepetitions}")
+    void repeat_test(RepetitionInfo repetitionInfo) {
+        System.out.println("test" + repetitionInfo.getCurrentRepetition() + "/" +
+                repetitionInfo.getTotalRepetitions());
+    }
+
+    @DisplayName("파라미터 테스트")
+    @ParameterizedTest(name = "{index} {displayName} message={0}")
+    // 파라미터의 순서에 따라 message 라는 파라미터에 담겨서 각각 한번씩 총 4번 실행된다.
+    @ValueSource(strings = {"날씨가", "많이", "더워지고", "있네요"})
+    void parameter_test(String message) {
 
     }
 
