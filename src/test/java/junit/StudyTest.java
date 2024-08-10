@@ -22,7 +22,10 @@ import static org.junit.jupiter.api.Assumptions.assumingThat;
  * @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // 하나의 클래스에서 인스턴스를 공유, @BeforeAll @AfterAll이 static일 필요 X
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class) // 테스트 순서
+/**
+ * 테스트 순서, 단위테스트에서는 많이 사용X, 시나리오 테스트, 유스케이스 테스트 등등에서 사용
+ */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class StudyTest {
 
     /**
