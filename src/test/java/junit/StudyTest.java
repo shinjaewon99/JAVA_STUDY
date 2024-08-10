@@ -21,7 +21,27 @@ import static org.junit.jupiter.api.Assumptions.assumingThat;
  *
  * @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
  */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS) // 하나의 클래스에서 인스턴스를 공유, @BeforeAll @AfterAll이 static일 필요 X
 class StudyTest {
+
+    /**
+     * 기본 전략이 테스트 마다 새로운 인스턴스를 생성하므로 공유하는 값이 다름
+     * 테스트 마다 새로운 객체
+     */
+    int value = 1;
+
+    /**
+     *  아래의 두개의 테스트 모두 1 출력
+     */
+    @Test
+    void value_up_test1() {
+        System.out.println(value++);
+    }
+
+    @Test
+    void value_up_test2() {
+        System.out.println(value++);
+    }
 
     @Test
     @DisplayName("스터디 만들기")
