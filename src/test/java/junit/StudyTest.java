@@ -1,8 +1,16 @@
 package junit;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.aggregator.*;
+import org.junit.jupiter.params.converter.ArgumentConversionException;
+import org.junit.jupiter.params.converter.SimpleArgumentConverter;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.sql.ParameterMetaData;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -139,8 +147,54 @@ class StudyTest {
     @ParameterizedTest(name = "{index} {displayName} message={0}")
     // 파라미터의 순서에 따라 message 라는 파라미터에 담겨서 각각 한번씩 총 4번 실행된다.
     @ValueSource(strings = {"날씨가", "많이", "더워지고", "있네요"})
+    /**
+     * @EmptySource
+     * @NullSource
+     **/
+    @NullAndEmptySource
     void parameter_test(String message) {
 
+    }
+
+    /**
+     * 반환 타입이 자동으로 변환이 되는 테스트
+     */
+    @ParameterizedTest(name = "{index} {displayName} message={0}")
+    @CsvSource({"10, '자바 스터디'", "20, '스프링'"})
+    void converter_test(
+            // 하나의 Args일때 사용 @ConvertWith(StudyConverter.class) Study study
+            // 생성자를 통한 Args 넘기기 Integer limit, String name
+            // ArgumentsAccessor argumentsAccessor
+            @AggregateWith(StudyAggregator.class) Study study
+    ) {
+        // System.out.println(new Study(limit, name));
+        // Study study = new Study(argumentsAccessor.getInteger(0), argumentsAccessor.getString(1));
+
+        System.out.println(study);
+    }
+
+    /**
+     * Aggregate는 반드시 static inner 클래스 이거나, public 이어야한다.
+     */
+    static class StudyAggregator implements ArgumentsAggregator {
+
+        @Override
+        public Object aggregateArguments(final ArgumentsAccessor accessor, final ParameterContext context) throws ArgumentsAggregationException {
+            return new Study(accessor.getInteger(0), accessor.getString(1));
+        }
+    }
+
+    /**
+     * Args가 하나일때 타입을 변환해주는 converter
+     */
+    static class StudyConverter extends SimpleArgumentConverter {
+
+        @Override
+        protected Object convert(final Object source, final Class<?> targetType) throws ArgumentConversionException {
+            // (변환해야할 타입, targetType, 메시지)
+            assertEquals(Study.class, targetType, "스터디로만 변환 가능");
+            return new Study(Integer.parseInt(source.toString()));
+        }
     }
 
     /**
