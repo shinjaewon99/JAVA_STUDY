@@ -1,7 +1,9 @@
 package junit;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.*;
 import org.junit.jupiter.params.converter.ArgumentConversionException;
@@ -31,8 +33,19 @@ import static org.junit.jupiter.api.Assumptions.assumingThat;
  * 테스트 순서, 단위테스트에서는 많이 사용X, 시나리오 테스트, 유스케이스 테스트 등등에서 사용
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+/**
+ * 확장 모델을 클래스에 부여 하는 방법
+ * @ExtendWith(FindSlowTestExtension.class)
+ */
+
 class StudyTest {
 
+    /**
+     * 확장 모델을 필드에서 정의하는 방법
+     * 조금더 유연하게 값을 부여 할 수 있음
+     */
+    @RegisterExtension
+    static FindSlowTestExtension findSlowTestExtension = new FindSlowTestExtension(1000L);
     /**
      * 기본 전략이 테스트 마다 새로운 인스턴스를 생성하므로 공유하는 값이 다름
      * 테스트 마다 새로운 객체
@@ -162,7 +175,14 @@ class StudyTest {
      * @Test
      * @Tag("slow")
      */
-    void slow_tag_test() {
+    void slow_tag_test() throws InterruptedException {
+        Thread.sleep(1005L);
+
+    }
+
+    @Test
+    void slow_tag_test2() throws InterruptedException {
+        Thread.sleep(1005L);
 
     }
 
