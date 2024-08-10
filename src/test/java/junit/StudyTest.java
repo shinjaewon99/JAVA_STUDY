@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assumptions.assumingThat;
  * @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // 하나의 클래스에서 인스턴스를 공유, @BeforeAll @AfterAll이 static일 필요 X
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class) // 테스트 순서
 class StudyTest {
 
     /**
@@ -31,14 +32,16 @@ class StudyTest {
     int value = 1;
 
     /**
-     *  아래의 두개의 테스트 모두 1 출력
+     * 아래의 두개의 테스트 모두 1 출력
      */
     @Test
+    @Order(1) // junit의 제공하는 Order 어노테이션 사용
     void value_up_test1() {
         System.out.println(value++);
     }
 
     @Test
+    @Order(2)
     void value_up_test2() {
         System.out.println(value++);
     }
