@@ -13,6 +13,10 @@ dependencies {
     // mockito 의존성 추가
     testImplementation 'org.mockito:mockito-core:5.5.0'
 
+    // JPA 의존성 추가
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'com.h2database:h2'
+
     implementation 'org.projectlombok:lombok:1.18.22'
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
