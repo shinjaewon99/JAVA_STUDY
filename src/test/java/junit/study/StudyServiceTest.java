@@ -13,6 +13,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 /**
@@ -152,7 +154,66 @@ class StudyServiceTest {
          * 어떠한 액션 이후에 해당 Mock 객체를 사용하지 않아야함
          */
         verifyNoMoreInteractions(memberService);
+    }
 
+    /**
+     * Mockito API
+     * when -> given
+     * then
+     */
+    void mockitoApiTest(@Mock MemberService memberService,
+                        @Mock StudyRepository studyRepository) {
+        // given
+        StudyService studyService = new StudyService(memberService, studyRepository);
+        Member member = new Member();
+        member.setId(1L);
+        member.setEmail("jw.com");
+
+        Study study = new Study(10, "테스트");
+        given(memberService.findById(1L)).willReturn(Optional.of(member));
+        given(studyRepository.save(study)).willReturn(study);
+
+        // when
+        studyService.createNewStudy(1L, study);
+
+        // then
+        then(memberService).should(times(1)).notify(study);
+    }
+
+
+    @Test
+    void openStudy(@Mock MemberService memberService,
+                   @Mock StudyRepository studyRepository) {
+        // given
+        StudyService studyService = new StudyService(memberService, studyRepository);
+        Study study = new Study(10, "더 자바, 테스트");
+        assertNull(study.getOpenedDateTime());
+
+        // when
+        /** TODO
+         * studyRepository Mock 객체의 save 메소드 호출 시 study를 리턴 하도록 만들기
+         */
+        given(studyRepository.save(study)).willReturn(study);
+
+        studyService.openStudy(study);
+
+        // then
+        /**
+         * TODO
+         * study의 status가 OPENED로 변경됐는지 확인
+         */
+        assertEquals(StudyStatus.OPENED, study.getStatus());
+
+        /**
+         * TODO
+         * study의 openedDateTime이 null이 아닌지 확인
+         */
+        assertNotNull(study.getOpenedDateTime());
+
+        /**
+         * memberservice의 notify메소드가 호출이 되었는지 확인
+         */
+        then(memberService).should().notify(study);
 
     }
 }
