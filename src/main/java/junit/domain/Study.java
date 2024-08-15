@@ -27,8 +27,13 @@ public class Study {
     private LocalDateTime openedDateTime;
     private Long ownerId;
 
-    public Study(int limit, String name) {
+    public Study(final int limit, final String name) {
         this.limitCount = limit;
         this.name = name;
+    }
+
+    public void open() {
+        this.openedDateTime = LocalDateTime.now();
+        this.status = StudyStatus.OPENED;
     }
 }
