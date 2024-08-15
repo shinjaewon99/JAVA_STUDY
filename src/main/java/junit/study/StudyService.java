@@ -24,8 +24,11 @@ public class StudyService {
 
     public Study createNewStudy(final Long memberId, Study study) {
         Optional<Member> member = memberService.findById(memberId);
-        study.setOwnerId(memberId);
-        // member.orElseThrow(() -> new IllegalArgumentException("회원 아이디" + memberId + "가 존재하지 않습니다."))
+        study.setOwnerId(member.orElseThrow(() -> new IllegalArgumentException("회원 아이디" + memberId + "가 존재하지 않습니다.")).getId());
+        Study newStudy = studyRepository.save(study);
+        memberService.notify(newStudy);
+        memberService.notify(member.get());
+
         return studyRepository.save(study);
     }
 }
