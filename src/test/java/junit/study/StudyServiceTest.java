@@ -5,6 +5,7 @@ import junit.domain.Study;
 import junit.member.MemberService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -12,7 +13,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @Mock 어노테이션과 @ExtendWith(MockitoExtenstion.class)는 같이 사용해야한다.
@@ -125,6 +126,33 @@ class StudyServiceTest {
          * studyRepository 객체에 save 메소드를 study 객체로 호출하면 study 그대로 리턴하도록 stubbing
          */
         when(studyRepository.save(study)).thenReturn(study);
+
+        /**
+         * verify + times
+         * 메소드 호출을 예상하고 카운트를 주는 테스트
+         * 메소드의 호출을 예상하고 카운트를 주었지만, 호출이 일어나지 않으면 에러 발생
+         */
+        verify(memberService, times(1)).notify(study);
+
+        /**
+         * 한번도 호출이 되지 않는것을 예상
+         */
+        // verify(memberService, never()).validate(any());
+
+        /**
+         * 메소드 호출 순서를 예상
+         */
+        InOrder inOrder = inOrder(memberService);
+        inOrder.verify(memberService).notify(study);
+        inOrder.verify(memberService).notify(member);
+
+
+        /**
+         * 더이상 호출이 없는 것을 예상
+         * 어떠한 액션 이후에 해당 Mock 객체를 사용하지 않아야함
+         */
+        verifyNoMoreInteractions(memberService);
+
 
     }
 }
