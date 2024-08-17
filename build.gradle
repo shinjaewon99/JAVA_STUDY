@@ -11,7 +11,8 @@ repositories {
 
 dependencies {
     // TestContainers 의존성 추가
-    testImplementation 'org.testcontainers:testcontainers:1.19.0'
+    testImplementation 'org.testcontainers:testcontainers:1.19.3'
+    testImplementation 'org.testcontainers:junit-jupiter:1.19.3'
 
     // mockito 의존성 추가
     testImplementation 'org.mockito:mockito-core:5.5.0'
