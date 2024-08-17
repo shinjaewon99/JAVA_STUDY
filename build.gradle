@@ -10,6 +10,9 @@ repositories {
 }
 
 dependencies {
+    // TestContainers 의존성 추가
+    testImplementation 'org.testcontainers:testcontainers:1.19.0'
+
     // mockito 의존성 추가
     testImplementation 'org.mockito:mockito-core:5.5.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.5.0'
